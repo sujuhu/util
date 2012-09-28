@@ -1,5 +1,3 @@
-
-
 #ifndef __pipe_h__
 #define __pipe_h__
 
