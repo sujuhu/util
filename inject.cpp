@@ -177,7 +177,7 @@ bool StartInject(
 		}
 
 		//往目标进程写代码
-		if(!WriteProcessMemory(hTargetProc, pCode, ThreadProc, dwCodeSize,0)) 
+		if(!WriteProcessMemory(hTargetProc, pCode, (LPCVOID)ThreadProc, dwCodeSize,0)) 
 		{		
 			break;
 		}

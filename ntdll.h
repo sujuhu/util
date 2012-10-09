@@ -42,13 +42,15 @@ extern "C" {
 #define DECLSPEC_EXPORT
 #endif
 
+/*
 #if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED)
 #define NTAPI __stdcall
 #else
 #define _cdecl
 #define NTAPI
 #endif
-
+*/
+	
 #if !defined(_NTSYSTEM_)
 #define NTSYSAPI DECLSPEC_IMPORT
 #else
@@ -338,7 +340,7 @@ typedef struct _UNICODE_STRING {
 } UNICODE_STRING;
 typedef UNICODE_STRING *PUNICODE_STRING;
 typedef const UNICODE_STRING *PCUNICODE_STRING;
-#define UNICODE_NULL ((WCHAR)0) // winnt
+//#define UNICODE_NULL ((WCHAR)0) // winnt
 
 //
 // Valid values for the Attributes field
