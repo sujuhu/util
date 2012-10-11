@@ -5,11 +5,12 @@
 extern "C" {
 #endif
 
+#ifdef WIN32
 bool StartInject(
 	const char* lpszProcName,
 	const char* lpszDllName,
 	uint32_t dwInjectProcID);
-
+#endif
 
 #ifdef __cplusplus
 }

@@ -1,8 +1,12 @@
 #include <stdint.h>
 #include <stdlib.h>
+
+
+#ifdef WIN32
 #include <windows.h>
 #include <tlhelp32.h>
 #include "inject.h"
+
 
 #pragma warning(disable:4996)
 
@@ -36,8 +40,9 @@ VOID EnablePrivilege(HANDLE hToken,LPCTSTR szPrivName)
 	//return((GetLastError() == ERROR_SUCCESS));
 }
 
-DWORD __stdcall ThreadProc(PTHREAD_PARAM param)
+DWORD __stdcall ThreadProc(void* p)
 {
+	PTHREAD_PARAM param = (PTHREAD_PARAM)p;
 
 	FARPROC lpLoadLibraryA	= (FARPROC) param->dwLoadLibraryA;
 
@@ -177,7 +182,7 @@ bool StartInject(
 		}
 
 		//往目标进程写代码
-		if(!WriteProcessMemory(hTargetProc, pCode, ThreadProc, dwCodeSize,0)) 
+		if(!WriteProcessMemory(hTargetProc, pCode, (const void*)ThreadProc, dwCodeSize,0)) 
 		{		
 			break;
 		}
@@ -529,3 +534,5 @@ HANDLE WINAPI OsCreateRemoteThread2(
 OsCreateRemoteThread2Ret:
 	return hThread;
 }
+
+#endif
