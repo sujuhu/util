@@ -1,6 +1,6 @@
 #pragma warning(disable:4996)
-#include <stdint.h>
 #include <wtypes.h>
+#include "typedef.h"
 #include <stdio.h>
 #include "strhelp.h"
 

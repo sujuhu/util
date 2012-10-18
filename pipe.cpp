@@ -1,6 +1,6 @@
 #pragma warning(disable:4996)
 //#include <tricky.h>
-#include <stdint.h>
+#include "typedef.h"
 #include "pipe.h"
 //#include "../base/util.h"
 
