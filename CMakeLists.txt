@@ -5,9 +5,7 @@ PROJECT(util)
 
 SET(SRC_LIST
 filemap.cpp
-pipe.cpp
 strhelp.cpp
-inject.cpp
 memhelp.cpp
 strconv.cpp
 )
@@ -19,7 +17,6 @@ SET_TARGET_PROPERTIES(util PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 #install
 INSTALL(TARGETS util ARCHIVE DESTINATION lib)
 INSTALL(FILES filemap.h DESTINATION include)
-INSTALL(FILES pipe.h DESTINATION include)
 INSTALL(FILES strconv.h DESTINATION include)
 INSTALL(FILES strhelp.h DESTINATION include)
 INSTALL(FILES pshpack1.h DESTINATION include)
