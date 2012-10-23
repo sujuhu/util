@@ -7,7 +7,7 @@
 bool	SplitString(
 		const char* lpszSrc, 
 		char chSplit, 
-		OUT char* aString, 
+		char* aString, 
 		int cbMaxInRow, 
 		int* pnMaxRow )
 {
@@ -16,12 +16,12 @@ bool	SplitString(
 	int nColumn = 0;
 	int i=0;
 
-	if( lpszSrc == NULL || IsBadStringPtr( lpszSrc, -1 ) ) {
+	if( lpszSrc == NULL) {
 		SetLastError( ERROR_INVALID_PARAMETER );
 		return FALSE;
 	}
 
-	if( pnMaxRow == NULL || IsBadWritePtr( pnMaxRow, sizeof( int ) ) ) {
+	if( pnMaxRow == NULL) {
 		SetLastError( ERROR_INVALID_PARAMETER );
 		return FALSE;
 	}
