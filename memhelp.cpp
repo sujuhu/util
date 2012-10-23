@@ -1,9 +1,9 @@
 #include <stdio.h>
-#include <windows.h>
+#include <memory.h>
 #include "memhelp.h"
 
 
-//判断内存块数据是否全零
+//脜脨露脧脛脷麓忙驴茅脢媒戮脻脢脟路帽脠芦脕茫
 bool IsZeroMemory( char* data, size_t size )
 {
 	for ( unsigned long i=0; i < size; i++ ) {
@@ -34,7 +34,7 @@ unsigned long asmemcpy(void* Dst, void *Src, unsigned long Len)
 		pop     esi;
 		pop     ecx;
 	}
-	return Len; // 返回复制的字符个数
+	return Len; // 路碌禄脴赂麓脰脝碌脛脳脰路没赂枚脢媒
 }
 
 
@@ -54,7 +54,7 @@ void *asmemset(void *Dst, int cSet, unsigned long Len)
 		rep stosb;
 		popad;
 	}
-	return Dst; // 返回Dst的值
+	return Dst; // 路碌禄脴Dst碌脛脰碌
 }
 
 int asmemcmp(const void *Src, const void *Dst, unsigned long len)
@@ -92,7 +92,7 @@ _End:
 	return r;
 }
 
-// 在二进制串中搜索一个字符，返回该字符的地址，搜索不到返回NULL
+// 脭脷露镁陆酶脰脝麓庐脰脨脣脩脣梅脪禄赂枚脳脰路没拢卢路碌禄脴赂脙脳脰路没碌脛碌脴脰路拢卢脣脩脣梅虏禄碌陆路碌禄脴NULL
 void *asmemchr(const void *Src, int c, unsigned long len)
 {
 	void *r = 0;
@@ -120,13 +120,13 @@ _End:
 
 
 /*
-Description:	内存字符串搜索
-Parameter:		haystack		内存
-hs			内存长度
-needle			所要搜索的字符串
-ns			字符串长度
-Return:			NULL			未找到
-NOT NULL		出现的位置
+Description:	脛脷麓忙脳脰路没麓庐脣脩脣梅
+Parameter:		haystack		脛脷麓忙
+hs			脛脷麓忙鲁陇露脠
+needle			脣霉脪陋脣脩脣梅碌脛脳脰路没麓庐
+ns			脳脰路没麓庐鲁陇露脠
+Return:			NULL			脦麓脮脪碌陆
+NOT NULL		鲁枚脧脰碌脛脦禄脰脙
 */
 const char* memstr( const char *haystack, int hs, const char *needle, int ns )
 {
@@ -145,7 +145,7 @@ const char* memstr( const char *haystack, int hs, const char *needle, int ns )
 	pt = hay = haystack;
 	n = hs;
 
-	//查找子串的位置指针
+	//虏茅脮脪脳脫麓庐碌脛脦禄脰脙脰赂脮毛
 	while((pt = (char*)memchr( hay, needle[0], n )) != 0)  {
 		n -= (int) (pt - hay);
 		if(n < ns)

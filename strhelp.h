@@ -56,7 +56,7 @@ char* MakeTimeString(
 
 bool MakeHexString(uint8_t* buffer, int size, char* hex, int max_cch);
 
-int	MakeHexBinary(const char* hex_str, IN uint8_t* buffer, int max_cch);
+int	MakeHexBinary(const char* hex_str, uint8_t* buffer, int max_cch);
 
 
 #ifdef __cplusplus

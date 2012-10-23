@@ -1,9 +1,21 @@
 ﻿#pragma warning(disable:4996)
-#include <wtypes.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <memory.h>
+#include <wchar.h>
 #include <errno.h>
 #include "typedef.h"
-#include <stdio.h>
 #include "strhelp.h"
+
+#ifdef __GNUC__
+#ifdef __MINGW32__
+
+#else
+//linux or linux
+#define _snprintf snprintf
+#define _snwprintf swprintf
+#endif
+#endif
 
 bool	SplitString(
 		const char* lpszSrc, 
@@ -193,7 +205,7 @@ char* MakeTimeString(SYSTEMTIME* tmSystem, char* lpszDatatime,
 }
 #endif
 
-bool MakeHexString(uint8_t* buffer, int size, OUT char* hex, int max_cch)
+bool MakeHexString(uint8_t* buffer, int size, char* hex, int max_cch)
 {
 	if( buffer == NULL || hex == NULL)
 		return false;
@@ -208,14 +220,14 @@ bool MakeHexString(uint8_t* buffer, int size, OUT char* hex, int max_cch)
 	return true;
 }
 
-int	MakeHexBinary(const char* hex_str, IN uint8_t* buffer, int max_cch)
+int	MakeHexBinary(const char* hex_str, uint8_t* buffer, int max_cch)
 {
 	int nLen = (int)strlen(hex_str);
 	int i = 0;
 	for( i=0; i < (nLen / 2) &&  i < (int)max_cch ; i++ ) {
 		char tmp[3] = {0};
 		strncpy( tmp, hex_str + i*2, 2 );
-		buffer[i] = (BYTE)strtoul(tmp, NULL, 16 );
+		buffer[i] = (uint8_t)strtoul(tmp, NULL, 16 );
 	}
 
 	return i;
