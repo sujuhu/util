@@ -12,6 +12,8 @@ extern "C" {
 #ifndef OUT
 #define OUT
 #endif
+	
+char* make_temp_filename(char* lpszBuffer, int cbBufSize )
 
 #ifdef __cplusplus
 }

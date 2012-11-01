@@ -11,19 +11,20 @@
 
 
 //生成临时文件的全路径
-BOOL GetTmpPathName( LPSTR lpszBuffer, int cbBufSize )
+char* make_temp_filename(char* lpszBuffer, int cbBufSize )
 {
-	if( IsBadWritePtr( lpszBuffer, cbBufSize ) )
-		return FALSE;
+	if (lpszBuffer == NULL) {
+		errno = EINVAL;
+		return NULL;
+	}
 
 	if( FAILED(GetTempPath( cbBufSize, lpszBuffer )))
-		return FALSE;
+		return NULL;
 
 	char strTempFileName[260] = {0};
 	if( FAILED( GetTempFileName( lpszBuffer, NULL, 0, strTempFileName )))
-		return FALSE;
+		return NULL;
 
 	strncpy( lpszBuffer, strTempFileName, cbBufSize - 1 );
-	return TRUE;
+	return lpszBuffer;
 }
-stat()
