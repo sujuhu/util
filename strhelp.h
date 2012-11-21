@@ -48,6 +48,7 @@ char* MakeMacString(uint8_t mac[6], char* str, int max_cch);
 char* MakeIPString(uint8_t ip[4], char* str, int max_cch);
 
 #ifdef _MSC_VER
+#include <windows.h>
 char* MakeTimeString(
 	SYSTEMTIME* tmSystem, 
 	char* lpszDatatime, 
