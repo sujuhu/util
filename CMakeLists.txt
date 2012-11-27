@@ -8,7 +8,6 @@ filemap.cpp
 strhelp.cpp
 memhelp.cpp
 strconv.cpp
-getopt.c
 )
 
 ADD_LIBRARY(util STATIC ${SRC_LIST})
