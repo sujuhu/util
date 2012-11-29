@@ -1,13 +1,26 @@
-#pragma warning(disable:4996)
-#include <stdint.h>
-#include <wtypes.h>
+ï»¿#pragma warning(disable:4996)
 #include <stdio.h>
+#include <stdlib.h>
+#include <memory.h>
+#include <wchar.h>
+#include <errno.h>
+#include "typedef.h"
 #include "strhelp.h"
+
+#ifdef __GNUC__
+#ifdef __MINGW32__
+
+#else
+//linux or linux
+#define _snprintf snprintf
+#define _snwprintf swprintf
+#endif
+#endif
 
 bool	SplitString(
 		const char* lpszSrc, 
 		char chSplit, 
-		OUT char* aString, 
+		char* aString, 
 		int cbMaxInRow, 
 		int* pnMaxRow )
 {
@@ -16,42 +29,42 @@ bool	SplitString(
 	int nColumn = 0;
 	int i=0;
 
-	if( lpszSrc == NULL || IsBadStringPtr( lpszSrc, -1 ) ) {
-		SetLastError( ERROR_INVALID_PARAMETER );
-		return FALSE;
+	if( lpszSrc == NULL) {
+		errno = EINVAL;
+		return false;
 	}
 
-	if( pnMaxRow == NULL || IsBadWritePtr( pnMaxRow, sizeof( int ) ) ) {
-		SetLastError( ERROR_INVALID_PARAMETER );
-		return FALSE;
+	if( pnMaxRow == NULL) {
+		errno = EINVAL;
+		return false;
 	}
 
-	if( aString == NULL || IsBadWritePtr( aString, cbMaxInRow * (*pnMaxRow) ) ) {
-		SetLastError( ERROR_INVALID_USER_BUFFER );
-		return FALSE;
+	if( aString == NULL ) {
+		errno = EINVAL;
+		return false;
 	}
 
 	nLenSrc = (int)strlen( lpszSrc );
 	if( nLenSrc == 0 ) {
 		*pnMaxRow = 0;
-		return TRUE;
+		return true;
 	}
 
 	for( ; i < nLenSrc; i++ ) {
 		if( lpszSrc[i] == chSplit ) {
-			//ËµÃ÷ÓÐÐÂÐÐÁË
+			//è¯´æ˜Žæœ‰æ–°è¡Œäº†
 			nRow++;
 			nColumn = 0;
 			if( nRow >= ( *pnMaxRow ) ) {
-				SetLastError( ERROR_INSUFFICIENT_BUFFER );
-				return FALSE;
+				errno = ENOMEM;
+				return false;
 			}
 		}
 		else {
 
 			if( nColumn >= ( cbMaxInRow - 1 ) ) {
-				SetLastError( ERROR_OUT_OF_STRUCTURES );
-				return FALSE;
+				errno = ERANGE;
+				return false;
 			}
 			*(aString + nRow*cbMaxInRow + nColumn ) = *(((char*)lpszSrc) + i );
 			nColumn++;
@@ -60,12 +73,12 @@ bool	SplitString(
 
 	(*pnMaxRow) = nRow + 1 ;
 
-	return TRUE;
+	return true;
 }
 
 /*
-Description:	É¾³ý×Ö·û´®×ó±ßµÄ¿Õ¸ñ
-Parameter£º		lpsz			×Ö·û´®
+Description:	åˆ é™¤å­—ç¬¦ä¸²å·¦è¾¹çš„ç©ºæ ¼
+Parameterï¼š		lpsz			å­—ç¬¦ä¸²
 */
 void	TrimLeftString(char* lpsz )
 {
@@ -76,22 +89,22 @@ void	TrimLeftString(char* lpsz )
 	if( strlen( lpsz ) <=0 ) 
 		return;
 
-	//É¾³ýÇ°ÃæµÄ¿Õ¸ñ
-	while( TRUE ) {
+	//åˆ é™¤å‰é¢çš„ç©ºæ ¼
+	while(true) {
 		if( pString[i] == ' ' ) {
 			nBlank++;
 			i++;
 		} else {
-			//²»Îª¿Õ¸ñ
+			//ä¸ä¸ºç©ºæ ¼
 			break;
 		}
 	}
 
 	if( nBlank != 0 ) {
-		//ÓÐ¿Õ¸ñ
+		//æœ‰ç©ºæ ¼
 		int nCopy = (int)strlen( lpsz ) - nBlank;
 		if( nCopy == 0 ) {
-			//È«²¿ÊÇ¿Õ¸ñ
+			//å…¨éƒ¨æ˜¯ç©ºæ ¼
 			lpsz[0] = 0;
 		}
 		strncpy( lpsz, pString + nBlank, nCopy );
@@ -99,7 +112,7 @@ void	TrimLeftString(char* lpsz )
 }
 
 /*
-	É¾³ý×Ö·û´®ÓÒ±ßµÄ¿Õ¸ñ
+	åˆ é™¤å­—ç¬¦ä¸²å³è¾¹çš„ç©ºæ ¼
  */
 void	TrimRightString(char* lpsz)
 {
@@ -119,33 +132,33 @@ void	TrimRightString(char* lpsz)
 
 int	CombinString(
 	char chSplit, 
-	OUT char* aString, 
+	char* aString, 
 	int cbMaxInRow, 
 	int nRow, 
-	OUT char* lpszDst, 
+	char* lpszDst, 
 	int nLenDst)
 {
 	int nWritePos = 0;
 	int i, j;
 
-	if( aString == NULL || IsBadReadPtr( aString, cbMaxInRow * nRow ) ) {
-		SetLastError( ERROR_INVALID_USER_BUFFER );
-		return FALSE;
+	if( aString == NULL) {
+		errno = EINVAL;	
+		return false;
 	}
 
 	for(  i=0; i < nRow ; i++ ) {
 		for( j=0; j < cbMaxInRow; j++ ) {
 			if( *( aString + i*cbMaxInRow + j) != '\0' ) {
 				if( nWritePos >= nLenDst ) {
-					SetLastError( ERROR_INSUFFICIENT_BUFFER );
+					errno = ENOMEM;
 					return 0;
 				}
 				lpszDst[nWritePos] = ( *( aString + i*cbMaxInRow + j ) );
 				nWritePos++;
 			} else {
-				//Ìî³äÒ»¸ö·Ö¸ô×Ö·û
+				//å¡«å……ä¸€ä¸ªåˆ†éš”å­—ç¬¦
 				if( nWritePos >= nLenDst ) {
-					SetLastError( ERROR_INSUFFICIENT_BUFFER );
+					errno = ERANGE;
 					return 0;
 				}
 				lpszDst[nWritePos] = chSplit;
@@ -159,11 +172,11 @@ int	CombinString(
 }
 
 /*
-Description:	»ñÈ¡MACµØÖ·¸ñÊ½µÄ×Ö·û´®
-Parameter:		pMac			MACµØÖ·µÄÖµ£¨6¸ö×Ö½Ú)
-lpszMac			MAC×Ö·û´®
-cbStrSize		MAC×Ö·û´®»º³åÇø³¤¶È
-Return:			LPCTSTR			·µ»ØMAC×Ö·û´®	
+Description:	èŽ·å–MACåœ°å€æ ¼å¼çš„å­—ç¬¦ä¸²
+Parameter:		pMac			MACåœ°å€çš„å€¼ï¼ˆ6ä¸ªå­—èŠ‚)
+lpszMac			MACå­—ç¬¦ä¸²
+cbStrSize		MACå­—ç¬¦ä¸²ç¼“å†²åŒºé•¿åº¦
+Return:			LPCTSTR			è¿”å›žMACå­—ç¬¦ä¸²	
 */
 char* MakeMacString(uint8_t mac[6], char* str, int max_cch)
 {
@@ -178,21 +191,21 @@ char* MakeIPString(uint8_t ip[4], char* str, int max_cch)
 	return str;
 }
 
-char* MakeTimeString(
-	SYSTEMTIME* tmSystem, 
-	OUT LPSTR lpszDatatime, 
-	DWORD cbBufferSize)
+#ifdef _MSC_VER
+char* MakeTimeString(SYSTEMTIME* tmSystem, char* lpszDatatime, 
+	int cbBufferSize)
 {
-	if( lpszDatatime == NULL || IsBadWritePtr( lpszDatatime, cbBufferSize ) )  
+	if( lpszDatatime == NULL) 
 		return NULL;
-	ZeroMemory( lpszDatatime, cbBufferSize );
+	memset(lpszDatatime, 0, cbBufferSize);
 	_snprintf( lpszDatatime, cbBufferSize - 1, "%d-%02d-%02d %02d:%02d:%02d", 
 		tmSystem->wYear,  tmSystem->wMonth, tmSystem->wDay, 
 		tmSystem->wHour, tmSystem->wMinute, tmSystem->wSecond );
 	return lpszDatatime;
 }
+#endif
 
-bool MakeHexString(uint8_t* buffer, int size, OUT char* hex, int max_cch)
+bool MakeHexString(uint8_t* buffer, int size, char* hex, int max_cch)
 {
 	if( buffer == NULL || hex == NULL)
 		return false;
@@ -207,14 +220,14 @@ bool MakeHexString(uint8_t* buffer, int size, OUT char* hex, int max_cch)
 	return true;
 }
 
-int	MakeHexBinary(const char* hex_str, IN uint8_t* buffer, int max_cch)
+int	MakeHexBinary(const char* hex_str, uint8_t* buffer, int max_cch)
 {
 	int nLen = (int)strlen(hex_str);
 	int i = 0;
 	for( i=0; i < (nLen / 2) &&  i < (int)max_cch ; i++ ) {
 		char tmp[3] = {0};
 		strncpy( tmp, hex_str + i*2, 2 );
-		buffer[i] = (BYTE)strtoul(tmp, NULL, 16 );
+		buffer[i] = (uint8_t)strtoul(tmp, NULL, 16 );
 	}
 
 	return i;

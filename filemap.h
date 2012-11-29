@@ -14,6 +14,9 @@ GNU General Public License for more details.
 
 */
 
+#ifndef FILEMAP_HEADER_H_
+#define FILEMAP_HEADER_H_
+
 #ifdef WIN32
 #include <windows.h>
 #define FILE_DESCRIPTOR         HANDLE
@@ -45,4 +48,6 @@ void unmap_file(MAPPED_FILE* pmapped_file);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
