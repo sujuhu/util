@@ -4,6 +4,7 @@
 #include <memory.h>
 #include <wchar.h>
 #include <errno.h>
+#include <string.h>
 #include "typedef.h"
 #include "strhelp.h"
 
