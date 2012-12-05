@@ -12,7 +12,7 @@
 extern "C" int _mbstowcs(wchar_t* wcs, char*mbs, size_t max_wc_count)
 {
 #if (defined _MSC_VER) || (defined __MINGW32__)
-  return mbstowcs(wcs, mbs, max_wc_count);
+  return (int)mbstowcs(wcs, mbs, max_wc_count);
 #else
   iconv_t cd = iconv_open("UCS-2", "ASCII");
   if(cd == (iconv_t)(-1)) {
@@ -43,7 +43,7 @@ extern "C" int _mbstowcs(wchar_t* wcs, char*mbs, size_t max_wc_count)
 extern "C" int _wcstombs(char *mbs, const wchar_t* wcs, size_t max_mbs_count)
 {
 #if (defined _MSC_VER) || (defined __MINGW32__)
-  return wcstombs(mbs, wcs, max_mbs_count);
+  return (int)wcstombs(mbs, wcs, max_mbs_count);
 #else
   iconv_t cd = iconv_open("ASCII", "UCS-2");
   if(cd == (iconv_t)(-1)) {
