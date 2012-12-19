@@ -4,7 +4,7 @@
 
 
 //ÅÐ¶ÏÄÚ´æ¿éÊý¾ÝÊÇ·ñÈ«Áã
-bool IsZeroMemory( char* data, size_t size )
+bool is_zero_memory(const char* data, size_t size )
 {
 	for ( unsigned long i=0; i < size; i++ ) {
 		if( *(data + i) != 0x0)

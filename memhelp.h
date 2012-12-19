@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 //判断内存块数据是否全零
-bool IsZeroMemory(char* pData, size_t dwDataSize );
+bool is_zero_memory(const char* pData, size_t dwDataSize );
 
 /*
 //内存复制（汇编实现）
